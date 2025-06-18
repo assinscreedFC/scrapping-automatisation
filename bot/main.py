@@ -1,6 +1,18 @@
-from dotenv import load_dotenv
-import os
+import asyncio
+from aiogram import Bot, Dispatcher
+from aiogram.enums import ParseMode
+from aiogram.client.default import DefaultBotProperties
+from bot.config import TOKEN
+from bot.handler.init import register_handlers
 
-load_dotenv()
-TOKEN = os.getenv("BOT_TOKEN")
-print(TOKEN)
+async def main():
+    bot = Bot(
+        token=TOKEN,
+        default=DefaultBotProperties(parse_mode=ParseMode.HTML)
+    )
+    dp = Dispatcher()
+    register_handlers(dp)
+    await dp.start_polling(bot)
+
+if __name__ == "__main__":
+    asyncio.run(main())

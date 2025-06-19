@@ -1,0 +1,19 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*.so
+
+# Environnement virtuel (si tu en utilises un)
+venv/
+env/
+
+# Fichiers secrets / config
+.env
+*.env
+
+# Snapshots / logs
+code.txt
+
+# OS metadata
+.DS_Store
+Thumbs.db

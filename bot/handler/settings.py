@@ -1,5 +1,5 @@
 from aiogram.types import Message
-from bot.utils.modifierJson import modifier_fichier_json, FichierNonTrouveError, CleNonTrouveeError
+from utils.modifierJson import modifier_fichier_json, FichierNonTrouveError, CleNonTrouveeError
 
 async def modifier_data(message: Message):
     try:

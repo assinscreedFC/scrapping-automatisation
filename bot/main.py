@@ -2,8 +2,8 @@ import asyncio
 from aiogram import Bot, Dispatcher
 from aiogram.enums import ParseMode
 from aiogram.client.default import DefaultBotProperties
-from bot.config import TOKEN
-from bot.handler.init import register_handlers
+from config import TOKEN
+from handler.init import register_handlers
 
 async def main():
     bot = Bot(

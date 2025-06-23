@@ -1,5 +1,3 @@
-# scrap/infra/http_client.py
-
 from curl_cffi import requests
 import random
 import logging

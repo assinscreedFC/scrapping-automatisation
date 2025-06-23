@@ -17,6 +17,9 @@ snapshot:
 
 clean:
 	@rm -f code.txt
+	@find . -type d -name "__pycache__" -exec rm -rf {} +
+	@rm -rf scrap/data/*.json
+	@rm -rf venv
 	@echo "code.txt supprimé"
 
 run:

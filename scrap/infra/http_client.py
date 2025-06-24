@@ -48,7 +48,18 @@ class HttpClient:
             response = self.session.get(url, params=params, headers=headers, proxy=proxy)
             response.raise_for_status()
             self._save_cookies()
+
+            # Crée le dossier si besoin
+            fetch_path = "scrap/data/fetch.html"
+            os.makedirs(os.path.dirname(fetch_path), exist_ok=True)
+
+            # Écrit le contenu HTML dans le fichier (écrase l'ancien)
+            with open(fetch_path, "w", encoding="utf-8") as f:
+                f.write(response.text)
+
+            self.logger.info(f"✅ Contenu sauvegardé dans {fetch_path}")
             return response.text
+
         except requests.RequestError as e:
             self.logger.error(f"Erreur GET {url} : {e}")
             return None

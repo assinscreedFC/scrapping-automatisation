@@ -1,4 +1,13 @@
-aiogram==3.4.1
+# Core bot framework
+aiogram==3.3.0
+
+# Web scraping
+playwright==1.44.0
+playwright-stealth==1.0.6
+curl_cffi==0.6.12
+
+# HTTP requests (pour validate_proxies.py)
+requests==2.32.3
+
+# Chargement de variables d'environnement
 python-dotenv==1.0.1
-playwright>=1.45
-playwright-stealth>=1.2.4

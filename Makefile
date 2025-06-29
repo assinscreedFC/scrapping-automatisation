@@ -19,8 +19,8 @@ clean:
 	@rm -f code.txt
 	@find . -type d -name "__pycache__" -exec rm -rf {} +
 	@rm -rf scrap/data/*.json
-	@rm -rf venv
-	@echo "code.txt supprimé"
+	@rm -rf .venv
+	@echo "projet nettoyé"
 
 run:
 	@echo "Démarrage du bot..."

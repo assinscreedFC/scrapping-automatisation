@@ -3,7 +3,7 @@ from bot.handler.help import help_cmd
 from aiogram.filters import Command
 from bot.handler.settings import modifier_data
 from bot.handler.search.search_cmd import search_cmd
-from bot.handler.extract.extract_cmd import extract_cmd, extract_description_cmd, list_attributes_elements_cmd, list_attributes_cmd, list_elements_cmd
+from bot.handler.extract.extract_cmd import extract_cmd, extract_description_cmd, list_attributes_elements_cmd, list_attributes_cmd, list_elements_cmd, max_cmd, min_cmd, mean_cmd
 
 
 def register_handlers(dp):
@@ -16,3 +16,6 @@ def register_handlers(dp):
     dp.message.register(list_attributes_elements_cmd, Command("list"))
     dp.message.register(list_attributes_cmd, Command("list_attributes"))
     dp.message.register(list_elements_cmd, Command("list_elements"))
+    dp.message.register(max_cmd, Command("max"))
+    dp.message.register(min_cmd, Command("min"))
+    dp.message.register(mean_cmd, Command("mean"))

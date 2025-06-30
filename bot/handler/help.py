@@ -19,21 +19,63 @@ COMMANDS_HELP = [
     },
     {
         "cmd": "/search",
-        "usage": "/search <url> <nombre_de_pages>",
+        "usage": "/search [url] [nombre_de_pages]",
         "desc": "Lance le scraping sur l'URL donnée pour le nombre de pages indiqué.",
         "example": "/search https://www.leboncoin.fr/recherche?category=2 2"
     },
     {
         "cmd": "/extract",
-        "usage": "/extract <attribute|element> <clé> [index]",
-        "desc": "Extrait une valeur d'attribut ou d'élément depuis les fichiers ads_<n>.json générés.\n- attribute : recherche dans les attributs (ex : brand, model, price, etc.)\n- element : recherche une clé dans tout le JSON (ex : store_id, owner, etc.)\n- [index] (optionnel) : pour ne récupérer qu'une valeur précise dans la liste.",
+        "usage": "/extract [attribute|element] [clé] [index]",
+        "desc": "Extrait une valeur d'attribut ou d'élément depuis les fichiers ads_[n].json générés.\n- attribute : recherche dans les attributs (ex : brand, model, price, etc.)\n- element : recherche une clé dans tout le JSON (ex : store_id, owner, etc.)\n- [index] (optionnel) : pour ne récupérer qu'une valeur précise dans la liste.",
         "example": "/extract attribute brand\n/extract element store_id 0"
     },
     {
         "cmd": "/description",
-        "usage": "/description <url_annonce>",
+        "usage": "/description [url_annonce]",
         "desc": "Récupère la description d'une annonce précise à partir de son URL.",
         "example": "/description https://www.leboncoin.fr/ad/voitures/2997258439"
+    },
+    {
+        "cmd": "/modifier",
+        "usage": "/modifier [clé] [valeur]",
+        "desc": "Modifie une valeur dans le fichier data.json du bot.",
+        "example": "/modifier prix 15000"
+    },
+    {
+        "cmd": "/list_attributes_elements",
+        "usage": "/list_attributes_elements",
+        "desc": "Affiche tous les attributes et elements trouvés dans les fichiers d'annonces.",
+        "example": "/list_attributes_elements"
+    },
+    {
+        "cmd": "/list_attributes",
+        "usage": "/list_attributes",
+        "desc": "Affiche tous les attributes trouvés dans les fichiers d'annonces.",
+        "example": "/list_attributes"
+    },
+    {
+        "cmd": "/list_elements",
+        "usage": "/list_elements",
+        "desc": "Affiche tous les elements trouvés dans les fichiers d'annonces.",
+        "example": "/list_elements"
+    },
+    {
+        "cmd": "/max",
+        "usage": "/max [attribute|element] [nom]",
+        "desc": "Affiche la valeur maximale d'un attribut ou élément sur tous les fichiers.",
+        "example": "/max attribute price"
+    },
+    {
+        "cmd": "/min",
+        "usage": "/min [attribute|element] [nom]",
+        "desc": "Affiche la valeur minimale d'un attribut ou élément sur tous les fichiers.",
+        "example": "/min element store_id"
+    },
+    {
+        "cmd": "/mean",
+        "usage": "/mean [attribute|element] [nom]",
+        "desc": "Affiche la moyenne d'un attribut ou élément sur tous les fichiers.",
+        "example": "/mean attribute price"
     }
 ]
 
@@ -63,12 +105,6 @@ def generate_help_text():
         text += f"<b>{cmd['usage']}</b> : {cmd['desc']}\n"
         if cmd['example']:
             text += f"   Exemple : {cmd['example']}\n"
-    text += "\n<b>Principaux attributes recherchables :</b>\n"
-    for attr in ATTRIBUTES:
-        text += f"- {attr}\n"
-    text += "\n<b>Principaux elements recherchables :</b>\n"
-    for el in ELEMENTS:
-        text += f"- {el}\n"
     text += "\nPour toute question, contacte l'administrateur du bot."
     return text
 

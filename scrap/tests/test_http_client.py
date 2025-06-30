@@ -24,7 +24,7 @@ def extraire_ads_et_sauvegarder(chaine: str, fichier_sortie: str = "ads.json"):
         match_debut = re.search(r'"ads"\s*:\s*\[', chaine)
         if not match_debut:
             print("❌ Clé 'ads' non trouvée.")
-            return
+            return 0
 
         start = match_debut.end()  # Position juste après le '['
         bracket_count = 1
@@ -42,7 +42,7 @@ def extraire_ads_et_sauvegarder(chaine: str, fichier_sortie: str = "ads.json"):
 
         if bracket_count != 0:
             print("❌ Tableau 'ads' mal formé (crochets non équilibrés).")
-            return
+            return 0
 
         tableau_ads_str = chaine[match_debut.start() + 6: i + 1]  # +6 pour passer '"ads":'
 
@@ -54,11 +54,14 @@ def extraire_ads_et_sauvegarder(chaine: str, fichier_sortie: str = "ads.json"):
             json.dump(ads_data, f, indent=2, ensure_ascii=False)
 
         print(f"✅ Tableau 'ads' extrait et sauvegardé dans {fichier_sortie}")
+        return len(ads_data)
 
     except json.JSONDecodeError as e:
         print(f"❌ Erreur JSON : {e}")
+        return 0
     except Exception as e:
         print(f"❌ Erreur inattendue : {e}")
+        return 0
 
 def test():
     proxy_pool = ProxyPool()

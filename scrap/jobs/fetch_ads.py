@@ -8,15 +8,17 @@ from scrap.tools.replace_page_number import remplacer_page
 
 def fetch_ads(url: str, nbr_page: int):
     client = HttpClient()
-    ### first step feetch all  informetion about the annonce
-    ### comme fetch la description peut etre une etape plus longe car ont doit chercher manuellment dans chaque annonce je ne vais pas
-    ### l'applique ici mais tout de meme je je vais integrer une fonction qui permert de recuper la description d'une annonce a la demande
-
+    total_ads = 0
     for i in range(nbr_page):
         sleep_between(5, 10)
         url = remplacer_page(url, i + 1)
         html = client.get(url)
-        extraire_ads_et_sauvegarder(html, f"scrap/tools/scrap/data/ads_{i + 1}.json")
+        if html is None:
+            continue
+        count = extraire_ads_et_sauvegarder(html, f"scrap/tools/scrap/data/ads_{i + 1}.json")
+        if count:
+            total_ads += count
+    return total_ads
 
 
 def fetch_description_ads(url:str):

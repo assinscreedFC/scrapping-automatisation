@@ -4,9 +4,22 @@ from aiogram.filters import Command
 from bot.handler.settings import modifier_data
 from bot.handler.search.search_cmd import search_cmd
 from bot.handler.extract.extract_cmd import extract_cmd, extract_description_cmd, list_attributes_elements_cmd, list_attributes_cmd, list_elements_cmd, max_cmd, min_cmd, mean_cmd
+from aiogram import types
 
+class ErrorHandlerMiddleware:
+    async def __call__(self, handler, event, data):
+        try:
+            return await handler(event, data)
+        except Exception as e:
+            # Log l'erreur côté serveur
+            print(f"[ERREUR] {type(e).__name__}: {e}")
+            if isinstance(event, types.Message):
+                await event.reply("❌ Une erreur inattendue est survenue. Merci de réessayer ou de contacter l'administrateur.")
+            # On peut aussi logger dans un fichier ici si besoin
+            return None
 
 def register_handlers(dp):
+    dp.message.middleware(ErrorHandlerMiddleware())
     dp.message.register(start_cmd, Command("start"))
     dp.message.register(help_cmd, Command("help"))
     dp.message.register(modifier_data, Command("modifier"))

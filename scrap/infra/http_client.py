@@ -42,8 +42,10 @@ class HttpClient:
             return None
         return random.choice(self.proxies)
 
-    def get(self, url, params=None, headers=None):
-        proxy = self.get_random_proxy()
+    def get(self, url, params=None, headers=None ,proxy=None):
+        if not proxy:
+            proxy = self.get_random_proxy()
+            print ("pas de random proxy")
         try:
             response = self.session.get(url, params=params, headers=headers, proxy=proxy)
             response.raise_for_status()
@@ -60,7 +62,7 @@ class HttpClient:
             self.logger.info(f"✅ Contenu sauvegardé dans {fetch_path}")
             return response.text
 
-        except requests.RequestError as e:
+        except requests.RequestsError as e:
             self.logger.error(f"Erreur GET {url} : {e}")
             return None
 

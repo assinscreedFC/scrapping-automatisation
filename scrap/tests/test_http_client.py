@@ -1,15 +1,15 @@
 from scrap.infra.http_client import HttpClient
-
+from scrap.infra.proxy_pool import ProxyPool
 def test_homepage_leboncoin():
     client = HttpClient()
-    url = "https://www.leboncoin.fr/ad/voitures/2933069016"
+    url = "https://www.leboncoin.fr/ad/voitures/2997258439"
     html = client.get(url)
     if html:
         print("✅ Requête réussie.")
         print("🔎 Début du HTML :")
         print(html)
-        #with open("resultat.txt", "w", encoding="utf-8") as f:
-        #    f.write(html)
+        with open("resultat.txt", "w", encoding="utf-8") as f:
+            f.write(html)
         #return html
     else:
         print("❌ Échec de la requête.")
@@ -60,10 +60,20 @@ def extraire_ads_et_sauvegarder(chaine: str, fichier_sortie: str = "ads.json"):
     except Exception as e:
         print(f"❌ Erreur inattendue : {e}")
 
-
+def test():
+    proxy_pool = ProxyPool()
+    # proxy_pool.extract_proxy()
+    client = HttpClient()
+    for i in range(2):
+        url = f"https://www.leboncoin.fr/recherche?text=clio+4&page={i + 1}"
+        html = client.get(url,proxy=proxy_pool.get_first_proxy())
+        extraire_ads_et_sauvegarder(html, f"ads_{i + 1}.json")
+        proxy_pool.round_proxy()
 if __name__ == "__main__":
-    html=test_homepage_leboncoin()
-    extraire_ads_et_sauvegarder(html)
+    #html=test_homepage_leboncoin()
+    #extraire_ads_et_sauvegarder(html)
+    #teste scrapp avec pool proxy 3 page teste pour voir le resulta ads123
+    test_homepage_leboncoin()
 
 
 

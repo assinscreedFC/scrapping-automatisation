@@ -42,4 +42,4 @@ def fetch_description_ads(url:str):
         print("Description non trouvée")
         raise print("pas de description trouver")
 
-fetch_description_ads("https://www.leboncoin.fr/ad/voitures/2997258439")
+#fetch_description_ads("https://www.leboncoin.fr/ad/voitures/2997258439")

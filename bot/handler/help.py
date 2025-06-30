@@ -76,6 +76,36 @@ COMMANDS_HELP = [
         "usage": "/mean [attribute|element] [nom]",
         "desc": "Affiche la moyenne d'un attribut ou élément sur tous les fichiers.",
         "example": "/mean attribute price"
+    },
+    {
+        "cmd": "/filter",
+        "usage": "/filter [prix_min] [prix_max] [localisation]",
+        "desc": "Filtre les annonces par prix et/ou localisation.",
+        "example": "/filter 10000 20000 Paris"
+    },
+    {
+        "cmd": "/stats",
+        "usage": "/stats",
+        "desc": "Affiche les statistiques générales des données.",
+        "example": "/stats"
+    },
+    {
+        "cmd": "/chart",
+        "usage": "/chart [type]",
+        "desc": "Affiche un graphique textuel sur les annonces. Types disponibles : price, brand, location, summary.",
+        "example": "/chart price\n/chart brand\n/chart location\n/chart summary"
+    },
+    {
+        "cmd": "/chartimg",
+        "usage": "/chartimg price",
+        "desc": "Envoie un histogramme des prix sous forme d'image PNG.",
+        "example": "/chartimg price"
+    },
+    {
+        "cmd": "/chartimg",
+        "usage": "/chartimg [type]",
+        "desc": "Envoie un graphique en image PNG. Types disponibles : price, ville.",
+        "example": "/chartimg price\n/chartimg ville"
     }
 ]
 

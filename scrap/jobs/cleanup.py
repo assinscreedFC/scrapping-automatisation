@@ -1,3 +1,10 @@
+"""
+partie temporraire sert a testet le combo playwright et curl cffi ensemble pour by pass les captcha et recupere
+les cookie de connexion
+"""
+
+
+
 import os, json, time, random
 from playwright.sync_api import sync_playwright
 from curl_cffi import requests

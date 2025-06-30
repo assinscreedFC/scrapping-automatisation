@@ -6,17 +6,18 @@ from scrap.tools.sleep_between import sleep_between
 from scrap.tools.replace_page_number import remplacer_page
 
 
-def fetch_ads(url:str,nbr_page:str):
+def fetch_ads(url: str, nbr_page: int):
     client = HttpClient()
     ### first step feetch all  informetion about the annonce
     ### comme fetch la description peut etre une etape plus longe car ont doit chercher manuellment dans chaque annonce je ne vais pas
     ### l'applique ici mais tout de meme je je vais integrer une fonction qui permert de recuper la description d'une annonce a la demande
 
     for i in range(nbr_page):
-        sleep(sleep_between(5,10))
-        url = remplacer_page(url,i+1)
+        sleep_between(5, 10)
+        url = remplacer_page(url, i + 1)
         html = client.get(url)
-        extraire_ads_et_sauvegarder(html, f"ads_{i + 1}.json")
+        extraire_ads_et_sauvegarder(html, f"scrap/tools/scrap/data/ads_{i + 1}.json")
+
 
 def fetch_description_ads(url:str):
     client = HttpClient()
@@ -34,7 +35,9 @@ def fetch_description_ads(url:str):
         import codecs
         description = codecs.decode(description, 'unicode_escape')
         print(description)
+        return description
     else:
         print("Description non trouvée")
+        raise print("pas de description trouver")
 
 fetch_description_ads("https://www.leboncoin.fr/ad/voitures/2997258439")

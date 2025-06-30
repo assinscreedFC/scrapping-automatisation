@@ -6,6 +6,8 @@ from bot.config import TOKEN
 from bot.handler.init import register_handlers
 
 async def main():
+    if TOKEN is None:
+        raise ValueError("Le TOKEN du bot Telegram n'est pas défini.")
     bot = Bot(
         token=TOKEN,
         default=DefaultBotProperties(parse_mode=ParseMode.HTML)

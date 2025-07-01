@@ -36,12 +36,6 @@ COMMANDS_HELP = [
         "example": "/description https://www.leboncoin.fr/ad/voitures/2997258439"
     },
     {
-        "cmd": "/modifier",
-        "usage": "/modifier [clé] [valeur]",
-        "desc": "Modifie une valeur dans le fichier data.json du bot.",
-        "example": "/modifier prix 15000"
-    },
-    {
         "cmd": "/list_attributes_elements",
         "usage": "/list_attributes_elements",
         "desc": "Affiche tous les attributes et elements trouvés dans les fichiers d'annonces.",
@@ -79,9 +73,9 @@ COMMANDS_HELP = [
     },
     {
         "cmd": "/filter",
-        "usage": "/filter [prix_min] [prix_max] [localisation]",
-        "desc": "Filtre les annonces par prix et/ou localisation.",
-        "example": "/filter 10000 20000 Paris"
+        "usage": "/filter [filtres]",
+        "desc": "Filtre les annonces selon plusieurs critères combinables : prix min, prix max, ville (city), marque (brand), etc. Syntaxe flexible : clé=valeur ou ancien format.",
+        "example": "/filter city=Paris\n/filter min=10000 max=20000\n/filter brand=Renault city=Lyon\n/filter min=5000 max=15000 city=Marseille brand=Peugeot\n/filter Paris\n/filter 10000 20000 Paris"
     },
     {
         "cmd": "/stats",

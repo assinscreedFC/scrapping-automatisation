@@ -61,20 +61,11 @@ def extract_price(ad: Dict[str, Any]) -> Optional[float]:
 
 def extract_location(ad: Dict[str, Any]) -> Optional[str]:
     """
-    Extrait la localisation d'une annonce en utilisant les fonctions existantes
+    Extrait la ville d'une annonce en utilisant uniquement l'élément 'city'.
     """
-    # Essaie d'abord les attributs
-    for location_key in ["location", "city", "ville"]:
-        locations = get_attribute_value(ad, location_key)
-        if locations:
-            return str(locations[0]) if isinstance(locations, list) else str(locations)
-    
-    # Essaie ensuite les éléments principaux
-    for location_key in ["location", "city", "ville", "address"]:
-        locations = find_element_value(ad, location_key)
-        if locations:
-            return str(locations[0]) if isinstance(locations, list) else str(locations)
-    
+    cities = find_element_value(ad, "city")
+    if cities:
+        return str(cities[0]) if isinstance(cities, list) else str(cities)
     return None
 
 def filter_by_price(ads: List[Dict[str, Any]], min_price: Optional[float] = None, max_price: Optional[float] = None) -> List[Dict[str, Any]]:

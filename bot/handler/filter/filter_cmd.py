@@ -1,39 +1,72 @@
 from aiogram.types import Message, InputFile
-from scrap.analysis.filters import load_ads_data, filter_ads
+from scrap.analysis.filters import load_ads_data, filter_ads, filter_by_price, filter_by_location
 from scrap.analysis.statistics import get_summary_statistics
 from scrap.analysis.charts import create_price_histogram, create_brand_chart, create_location_chart, create_summary_chart, plot_price_histogram, plot_location_histogram
 from aiogram.types import BufferedInputFile
+from scrap.jobs.statistic import get_attribute_value
 
 async def filter_cmd(message: Message):
     """
-    Commande: /filter [prix_min] [prix_max] [localisation]
-    Exemple: /filter 10000 20000 Paris
+    Commande: /filter [filtres]
+    Exemples :
+      /filter city=Paris
+      /filter min=10000 max=20000
+      /filter brand=Renault city=Lyon
+      /filter min=5000 max=15000 city=Marseille brand=Peugeot
     """
     if not message.text:
-        await message.reply("Usage: /filter [prix_min] [prix_max] [localisation]\nExemple: /filter 10000 20000 Paris")
+        await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=Renault city=Lyon")
         return
-    
     try:
         parts = message.text.split()
         if len(parts) < 2:
-            await message.reply("Usage: /filter [prix_min] [prix_max] [localisation]")
+            await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=Renault city=Lyon")
             return
         
+        # Parsing flexible des arguments
         min_price = None
         max_price = None
-        location_keywords = None
+        city = None
+        brand = None
+        # Pour compatibilité, on stocke les mots isolés
+        keywords = []
         
-        # Parse les arguments
-        if len(parts) >= 3:
-            try:
-                min_price = float(parts[1])
-                max_price = float(parts[2])
-            except ValueError:
-                await message.reply("❌ Les prix doivent être des nombres valides")
-                return
-        
-        if len(parts) >= 4:
-            location_keywords = parts[3:]
+        for arg in parts[1:]:
+            if '=' in arg:
+                key, value = arg.split('=', 1)
+                key = key.lower()
+                value = value.strip()
+                if key == 'min':
+                    try:
+                        min_price = float(value)
+                    except ValueError:
+                        await message.reply(f"❌ min doit être un nombre valide")
+                        return
+                elif key == 'max':
+                    try:
+                        max_price = float(value)
+                    except ValueError:
+                        await message.reply(f"❌ max doit être un nombre valide")
+                        return
+                elif key == 'city':
+                    city = value
+                elif key == 'brand':
+                    brand = value
+                else:
+                    keywords.append(value)
+            else:
+                # Ancien format : si nombre, c'est min/max, sinon ville
+                try:
+                    val = float(arg)
+                    if min_price is None:
+                        min_price = val
+                    elif max_price is None:
+                        max_price = val
+                except ValueError:
+                    if city is None:
+                        city = arg
+                    else:
+                        keywords.append(arg)
         
         # Charge et filtre les données
         ads = load_ads_data()
@@ -41,7 +74,16 @@ async def filter_cmd(message: Message):
             await message.reply("❌ Aucune donnée disponible. Lancez d'abord /search")
             return
         
-        filtered_ads = filter_ads(ads, min_price, max_price, location_keywords)
+        # Application des filtres combinés
+        filtered_ads = ads
+        if min_price is not None or max_price is not None:
+            filtered_ads = filter_by_price(filtered_ads, min_price, max_price)
+        if city:
+            filtered_ads = filter_by_location(filtered_ads, [city])
+        if brand:
+            # Filtre par marque (attribut brand)
+            filtered_ads = [ad for ad in filtered_ads if any(brand.lower() == str(b).lower() for b in (get_attribute_value(ad, "brand") or []))]
+        # On pourrait ajouter d'autres filtres ici (keywords, etc)
         
         if not filtered_ads:
             await message.reply("❌ Aucune annonce trouvée avec ces critères")
@@ -50,7 +92,6 @@ async def filter_cmd(message: Message):
         # Affiche le résultat
         result_msg = f"🔍 <b>Résultats du filtrage</b>\n\n"
         result_msg += f"📦 {len(filtered_ads)} annonces trouvées\n"
-        
         if min_price is not None or max_price is not None:
             price_range = ""
             if min_price is not None:
@@ -60,12 +101,11 @@ async def filter_cmd(message: Message):
                     price_range += " et "
                 price_range += f"Prix ≤ {max_price}€"
             result_msg += f"💰 {price_range}\n"
-        
-        if location_keywords:
-            result_msg += f"📍 Localisation: {' '.join(location_keywords)}\n"
-        
+        if city:
+            result_msg += f"📍 Ville: {city}\n"
+        if brand:
+            result_msg += f"🏷 Marque: {brand}\n"
         await message.reply(result_msg, parse_mode="HTML")
-        
     except Exception as e:
         await message.reply(f"❌ Erreur lors du filtrage: {str(e)}")
 

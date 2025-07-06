@@ -74,8 +74,8 @@ COMMANDS_HELP = [
     {
         "cmd": "/filter",
         "usage": "/filter [filtres]",
-        "desc": "Filtre les annonces selon plusieurs critères combinables : prix min, prix max, ville (city), marque (brand), etc. Syntaxe flexible : clé=valeur ou ancien format.",
-        "example": "/filter city=Paris\n/filter min=10000 max=20000\n/filter brand=Renault city=Lyon\n/filter min=5000 max=15000 city=Marseille brand=Peugeot\n/filter Paris\n/filter 10000 20000 Paris"
+        "desc": "Filtre les annonces selon plusieurs critères combinables : prix min, prix max, ville (city), marque (brand), etc. Utilisez des guillemets pour les noms avec espaces.",
+        "example": "/filter city=Paris\n/filter min=10000 max=20000\n/filter brand=Renault city=Lyon\n/filter brand=\"Land Rover\" city=\"New York\"\n/filter min=5000 max=15000 city=Marseille brand=Peugeot"
     },
     {
         "cmd": "/stats",
@@ -100,6 +100,48 @@ COMMANDS_HELP = [
         "usage": "/chartimg [type]",
         "desc": "Envoie un graphique en image PNG. Types disponibles : price, ville.",
         "example": "/chartimg price\n/chartimg ville"
+    },
+    {
+        "cmd": "/export",
+        "usage": "/export",
+        "desc": "Affiche un menu pour exporter les données vers différents formats (JSON, CSV, Excel).",
+        "example": "/export"
+    },
+    {
+        "cmd": "/exportjson",
+        "usage": "/exportjson",
+        "desc": "Exporte directement les données en format JSON et les envoie dans la conversation.",
+        "example": "/exportjson"
+    },
+    {
+        "cmd": "/exportcsv",
+        "usage": "/exportcsv",
+        "desc": "Exporte directement les données en format CSV et les envoie dans la conversation.",
+        "example": "/exportcsv"
+    },
+    {
+        "cmd": "/exportexcel",
+        "usage": "/exportexcel",
+        "desc": "Exporte directement les données en format Excel avec plusieurs feuilles et les envoie dans la conversation.",
+        "example": "/exportexcel"
+    },
+    {
+        "cmd": "/exportstats",
+        "usage": "/exportstats",
+        "desc": "Affiche les statistiques détaillées des données avec un bouton pour les exporter.",
+        "example": "/exportstats"
+    },
+    {
+        "cmd": "/cleanup",
+        "usage": "/cleanup",
+        "desc": "Supprime toutes les données de scraping stockées.",
+        "example": "/cleanup"
+    },
+    {
+        "cmd": "/cleanupstatus",
+        "usage": "/cleanupstatus",
+        "desc": "Affiche le statut des données de scraping (nombre de fichiers).",
+        "example": "/cleanupstatus"
     }
 ]
 

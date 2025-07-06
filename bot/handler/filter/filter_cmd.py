@@ -13,14 +13,35 @@ async def filter_cmd(message: Message):
       /filter min=10000 max=20000
       /filter brand=Renault city=Lyon
       /filter min=5000 max=15000 city=Marseille brand=Peugeot
+      /filter city="New York" brand="Land Rover"
     """
     if not message.text:
-        await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=Renault city=Lyon")
+        await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=\"Land Rover\" city=\"New York\"")
         return
     try:
-        parts = message.text.split()
+        # Parser la commande en gérant les guillemets pour les noms avec espaces
+        command_text = message.text
+        parts = []
+        current_part = ""
+        in_quotes = False
+        
+        # Parser caractère par caractère pour gérer les guillemets
+        for char in command_text:
+            if char == '"':
+                in_quotes = not in_quotes
+            elif char == ' ' and not in_quotes:
+                if current_part.strip():
+                    parts.append(current_part.strip())
+                current_part = ""
+            else:
+                current_part += char
+        
+        # Ajouter la dernière partie
+        if current_part.strip():
+            parts.append(current_part.strip())
+        
         if len(parts) < 2:
-            await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=Renault city=Lyon")
+            await message.reply("Usage: /filter [filtres]\nExemples: /filter city=Paris | /filter min=10000 max=20000 | /filter brand=\"Land Rover\" city=\"New York\"")
             return
         
         # Parsing flexible des arguments
@@ -35,7 +56,8 @@ async def filter_cmd(message: Message):
             if '=' in arg:
                 key, value = arg.split('=', 1)
                 key = key.lower()
-                value = value.strip()
+                # Nettoyer les guillemets autour de la valeur
+                value = value.strip().strip('"')
                 if key == 'min':
                     try:
                         min_price = float(value)
@@ -56,17 +78,19 @@ async def filter_cmd(message: Message):
                     keywords.append(value)
             else:
                 # Ancien format : si nombre, c'est min/max, sinon ville
+                # Nettoyer les guillemets
+                clean_arg = arg.strip('"')
                 try:
-                    val = float(arg)
+                    val = float(clean_arg)
                     if min_price is None:
                         min_price = val
                     elif max_price is None:
                         max_price = val
                 except ValueError:
                     if city is None:
-                        city = arg
+                        city = clean_arg
                     else:
-                        keywords.append(arg)
+                        keywords.append(clean_arg)
         
         # Charge et filtre les données
         ads = load_ads_data()
@@ -81,8 +105,12 @@ async def filter_cmd(message: Message):
         if city:
             filtered_ads = filter_by_location(filtered_ads, [city])
         if brand:
-            # Filtre par marque (attribut brand)
-            filtered_ads = [ad for ad in filtered_ads if any(brand.lower() == str(b).lower() for b in (get_attribute_value(ad, "brand") or []))]
+            # Filtre par marque (attribut brand) - plus flexible pour les noms avec espaces
+            brand_lower = brand.lower()
+            filtered_ads = [ad for ad in filtered_ads if any(
+                brand_lower in str(b).lower() or str(b).lower() in brand_lower
+                for b in (get_attribute_value(ad, "brand") or [])
+            )]
         # On pourrait ajouter d'autres filtres ici (keywords, etc)
         
         if not filtered_ads:

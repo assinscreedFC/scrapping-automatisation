@@ -4,6 +4,8 @@ from aiogram.filters import Command
 from bot.handler.search.search_cmd import search_cmd
 from bot.handler.extract.extract_cmd import extract_cmd, extract_description_cmd, list_attributes_elements_cmd, list_attributes_cmd, list_elements_cmd, max_cmd, min_cmd, mean_cmd
 from bot.handler.filter.filter_cmd import filter_cmd, stats_cmd, chart_cmd, chart_img_cmd
+from bot.handler.export.export_cmd import export_cmd, export_callback, export_json_cmd, export_csv_cmd, export_excel_cmd, export_stats_cmd
+from bot.handler.cleanup_cmd import cleanup_cmd, cleanup_status_cmd
 from aiogram import types
 from aiogram.types import InlineKeyboardMarkup, InlineKeyboardButton
 
@@ -69,3 +71,11 @@ def register_handlers(dp):
     dp.message.register(stats_cmd, Command("stats"))
     dp.message.register(chart_cmd, Command("chart"))
     dp.message.register(chart_img_cmd, Command("chartimg"))
+    dp.message.register(export_cmd, Command("export"))
+    dp.message.register(export_json_cmd, Command("exportjson"))
+    dp.message.register(export_csv_cmd, Command("exportcsv"))
+    dp.message.register(export_excel_cmd, Command("exportexcel"))
+    dp.message.register(export_stats_cmd, Command("exportstats"))
+    dp.message.register(cleanup_cmd, Command("cleanup"))
+    dp.message.register(cleanup_status_cmd, Command("cleanupstatus"))
+    dp.callback_query.register(export_callback, lambda c: c.data.startswith("export_"))

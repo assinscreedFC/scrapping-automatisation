@@ -31,7 +31,7 @@ pip
 ### Installation
 ```bash
 # Clone le repository
-git clone <votre-repo>
+git clone https://github.com/assinscreedFC/scrapping-automatisation.git
 cd scrapping-automatisation
 
 # Installe les dépendances
